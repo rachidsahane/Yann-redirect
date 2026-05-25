@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Rejoindre la chaîne WhatsApp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #25D366;
+      --green-light: #d9fbe8;
+      --green-mid: #b7f5d4;
+      --dark: #0d1117;
+      --text: #1a2332;
+      --muted: #6b7a90;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Decorative blobs */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -80px; right: -80px;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, var(--green-mid) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+      animation: pulse 4s ease-in-out infinite;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -60px; left: -60px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, var(--green-light) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+      animation: pulse 4s ease-in-out infinite 2s;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    /* WhatsApp icon */
+    .wa-icon {
+      width: 72px; height: 72px;
+      background: var(--green);
+      border-radius: 20px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(37,211,102,0.35);
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .wa-icon svg { width: 42px; height: 42px; fill: white; }
+
+    /* --- TIKTOK VIEW (instructions) --- */
+    #tiktok-view { display: none; }
+    #tiktok-view .headline {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    #tiktok-view .sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: #f7fdfb;
+      border: 1.5px solid var(--green-mid);
+      border-radius: 16px;
+      padding: 16px 18px;
+      animation: slideUp 0.5s ease both;
+    }
+    .step:nth-child(2) { animation-delay: 0.1s; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--green);
+    }
+    .step-text {
+      padding-top: 6px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    .step-text strong { font-weight: 700; color: var(--dark); }
+    .step-text .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--dark);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
+    .step-text .open-btn {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .arrow-hint {
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+    .arrow-hint svg { fill: var(--green); }
+
+    /* --- BROWSER VIEW (auto-redirect) --- */
+    #browser-view { display: none; }
+    #browser-view .headline {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+    #browser-view .sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .redirect-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--green);
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 32px;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.4);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .redirect-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 12px rgba(37,211,102,0.3);
+    }
+    .redirect-btn svg { width: 22px; height: 22px; fill: white; }
+
+    .countdown {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .countdown span { font-weight: 700; color: var(--green); }
+
+    .branding {
+      position: fixed;
+      bottom: 20px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: #ccc;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="wa-icon">
+      <!-- WhatsApp SVG -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+    </div>
+
+    <!-- TikTok In-App Browser: show instructions -->
+    <div id="tiktok-view">
+      <div class="headline">Une étape rapide<br>pour me rejoindre 🚀</div>
+      <div class="sub">TikTok ne peut pas ouvrir WhatsApp directement.<br>Suis ces 2 étapes simples :</div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            Appuie sur <span class="badge">••• </span> en haut à droite de l'écran
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            Puis clique sur <span class="open-btn">"Ouvrir dans le navigateur"</span> — tu rejoindras ma chaîne automatiquement ✅
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-hint">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M7 14l5-5 5 5"/></svg>
+        Regarde en haut à droite
+        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M7 14l5-5 5 5"/></svg>
+      </div>
+    </div>
+
+    <!-- Real browser: auto-redirect -->
+    <div id="browser-view">
+      <div class="headline">Redirection en cours…</div>
+      <div class="sub">Tu vas être redirigé vers ma chaîne WhatsApp.</div>
+
+      <a id="wa-link" href="#" class="redirect-btn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.76-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Ouvrir ma chaîne WhatsApp
+      </a>
+
+      <div class="countdown">Si ça ne s'ouvre pas, clique sur le bouton ☝️</div>
+    </div>
+  </div>
+
+  <div class="branding">Propulsé par ❤️</div>
+
+  <script>
+    // ── CONFIGURE THIS ──────────────────────────────────────────────
+    // Paste your WhatsApp channel link here:
+    var WA_CHANNEL_URL = "https://whatsapp.com/channel/0029VbBRZdCEFeXt8E59503n";
+    // ────────────────────────────────────────────────────────────────
+
+    function isTikTokBrowser() {
+      var ua = navigator.userAgent || "";
+      return /musical_ly|TikTok|BytedanceWebview|ByteLocale|aweme/i.test(ua);
+    }
+
+    document.getElementById("wa-link").href = WA_CHANNEL_URL;
+
+    if (isTikTokBrowser()) {
+      document.getElementById("tiktok-view").style.display = "block";
+    } else {
+      document.getElementById("browser-view").style.display = "block";
+
+      // Redirect instantly
+      window.location.href = WA_CHANNEL_URL;
+    }
+  </script>
+</body>
+</html>
