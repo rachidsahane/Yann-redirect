@@ -167,13 +167,55 @@
       gap: 8px;
       font-size: 13px;
       color: var(--muted);
-      animation: blink 2s ease-in-out infinite;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
+
+    /* Bouncing corner arrow pointing to ••• */
+    .corner-arrow {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
     }
-    .arrow-hint svg { fill: var(--green); }
+    .corner-arrow .chev {
+      width: 40px; height: 40px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(37,211,102,0.55);
+      animation: bounce1 0.9s ease-in-out infinite;
+    }
+    .corner-arrow .chev svg {
+      width: 22px; height: 22px;
+      stroke: white; fill: none;
+      stroke-width: 3;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .corner-arrow .chev2 {
+      width: 30px; height: 30px;
+      background: var(--green-mid);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(37,211,102,0.3);
+      animation: bounce1 0.9s ease-in-out infinite 0.18s;
+    }
+    .corner-arrow .chev2 svg {
+      width: 16px; height: 16px;
+      stroke: var(--green); fill: none;
+      stroke-width: 3;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    @keyframes bounce1 {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(9px); }
+    }
 
     /* --- BROWSER VIEW (auto-redirect) --- */
     #browser-view { display: none; }
@@ -243,10 +285,19 @@
       </svg>
     </div>
 
+    <!-- Bouncing arrow pointing to ••• top-right -->
+    <div class="corner-arrow">
+      <div class="chev">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+      </div>
+      <div class="chev2">
+        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+      </div>
+    </div>
+
     <!-- TikTok In-App Browser: show instructions -->
     <div id="tiktok-view">
-      <div class="headline">Une étape rapide<br>pour me rejoindre 🚀</div>
-      <div class="sub">TikTok ne peut pas ouvrir WhatsApp directement.<br>Suis ces 2 étapes simples :</div>
+      <div class="headline">Une étape rapide<br>pour me rejoindre</div>
 
       <div class="steps">
         <div class="step">
@@ -263,11 +314,7 @@
         </div>
       </div>
 
-      <div class="arrow-hint">
-        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M7 14l5-5 5 5"/></svg>
-        Regarde en haut à droite
-        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M7 14l5-5 5 5"/></svg>
-      </div>
+      <div class="arrow-hint">👆 Appuie là-haut à droite</div>
     </div>
 
     <!-- Real browser: auto-redirect -->
@@ -286,7 +333,7 @@
     </div>
   </div>
 
-  <div class="branding">Propulsé par ❤️</div>
+  <div class="branding">Propulsé par Yann Pro</div>
 
   <script>
     // ── CONFIGURE THIS ──────────────────────────────────────────────
@@ -304,6 +351,7 @@
     if (isTikTokBrowser()) {
       document.getElementById("tiktok-view").style.display = "block";
     } else {
+      document.querySelector(".corner-arrow").style.display = "none";
       document.getElementById("browser-view").style.display = "block";
 
       // Redirect instantly
