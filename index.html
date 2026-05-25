@@ -28,12 +28,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 32px 24px;
-      overflow: hidden;
+      padding: 32px 24px 120px;
+      overflow-x: hidden;
       position: relative;
     }
 
-    /* Decorative blobs */
     body::before {
       content: '';
       position: fixed;
@@ -54,7 +53,6 @@
       z-index: 0;
       animation: pulse 4s ease-in-out infinite 2s;
     }
-
     @keyframes pulse {
       0%, 100% { transform: scale(1); opacity: 0.8; }
       50% { transform: scale(1.1); opacity: 1; }
@@ -86,7 +84,7 @@
     }
     .wa-icon svg { width: 42px; height: 42px; fill: white; }
 
-    /* --- TIKTOK VIEW (instructions) --- */
+    /* ── TIKTOK VIEW ── */
     #tiktok-view { display: none; }
     #tiktok-view .headline {
       font-size: 26px;
@@ -98,20 +96,20 @@
     #tiktok-view .sub {
       font-size: 14px;
       color: var(--muted);
-      margin-bottom: 36px;
+      margin-bottom: 28px;
       line-height: 1.6;
     }
 
     .steps {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       text-align: left;
     }
     .step {
       display: flex;
       align-items: flex-start;
-      gap: 16px;
+      gap: 14px;
       background: #f7fdfb;
       border: 1.5px solid var(--green-mid);
       border-radius: 16px;
@@ -121,7 +119,7 @@
     .step:nth-child(2) { animation-delay: 0.1s; }
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     .step-num {
       flex-shrink: 0;
@@ -138,91 +136,174 @@
     .step-text {
       padding-top: 6px;
       font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.6;
       color: var(--text);
     }
-    .step-text strong { font-weight: 700; color: var(--dark); }
-    .step-text .badge {
+    .badge {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
       background: var(--dark);
       color: white;
       font-size: 12px;
-      font-weight: 600;
-      padding: 2px 8px;
+      font-weight: 700;
+      padding: 2px 9px;
       border-radius: 6px;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.05em;
+      vertical-align: middle;
     }
-    .step-text .open-btn {
+    .open-btn {
       color: var(--green);
       font-weight: 700;
     }
 
-    .arrow-hint {
-      margin-top: 28px;
+    /* ══════════════════════════════════════
+       TOP-RIGHT ARROW  (pointing to •••)
+    ══════════════════════════════════════ */
+    .top-arrow {
+      position: fixed;
+      top: 10px;
+      right: 12px;
+      z-index: 200;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--muted);
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0;
+      pointer-events: none;
     }
 
-    /* Bouncing corner arrow pointing to ••• */
-    .corner-arrow {
+    /* The big curved arrow SVG */
+    .top-arrow svg.arrow-svg {
+      width: 52px;
+      height: 72px;
+      filter: drop-shadow(0 3px 8px rgba(37,211,102,0.55));
+      animation: arrowBounce 0.85s ease-in-out infinite;
+    }
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%       { transform: translateY(10px) rotate(3deg); }
+    }
+
+    /* Tap label next to arrow */
+    .top-arrow .tap-label {
+      position: absolute;
+      top: 50%;
+      right: 58px;
+      transform: translateY(-50%);
+      background: var(--dark);
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      padding: 5px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      animation: arrowBounce 0.85s ease-in-out infinite;
+    }
+    .top-arrow .tap-label::after {
+      content: '';
+      position: absolute;
+      right: -6px; top: 50%;
+      transform: translateY(-50%);
+      border: 6px solid transparent;
+      border-left-color: var(--dark);
+      border-right: 0;
+    }
+
+    /* ══════════════════════════════════════
+       BOTTOM INDICATOR (highlight "Ouvrir dans le navigateur")
+    ══════════════════════════════════════ */
+    .bottom-indicator {
       position: fixed;
-      top: 14px;
-      right: 14px;
-      z-index: 100;
+      bottom: 0; left: 0; right: 0;
+      z-index: 200;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      padding-bottom: 12px;
+      pointer-events: none;
+
+      /* Hidden by default, shown after delay */
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .corner-arrow .chev {
-      width: 40px; height: 40px;
-      background: var(--green);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 18px rgba(37,211,102,0.55);
-      animation: bounce1 0.9s ease-in-out infinite;
-    }
-    .corner-arrow .chev svg {
-      width: 22px; height: 22px;
-      stroke: white; fill: none;
-      stroke-width: 3;
-      stroke-linecap: round; stroke-linejoin: round;
-    }
-    .corner-arrow .chev2 {
-      width: 30px; height: 30px;
-      background: var(--green-mid);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 10px rgba(37,211,102,0.3);
-      animation: bounce1 0.9s ease-in-out infinite 0.18s;
-    }
-    .corner-arrow .chev2 svg {
-      width: 16px; height: 16px;
-      stroke: var(--green); fill: none;
-      stroke-width: 3;
-      stroke-linecap: round; stroke-linejoin: round;
-    }
-    @keyframes bounce1 {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(9px); }
+    .bottom-indicator.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* --- BROWSER VIEW (auto-redirect) --- */
+    /* Bouncing down-arrow */
+    .bottom-indicator .down-arrow-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      margin-bottom: 8px;
+    }
+    .bottom-indicator svg.down-arrow {
+      width: 38px; height: 50px;
+      filter: drop-shadow(0 2px 6px rgba(37,211,102,0.6));
+      animation: downBounce 0.85s ease-in-out infinite;
+    }
+    @keyframes downBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* The fake "Ouvrir dans le navigateur" highlight pill */
+    .highlight-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border: 2.5px solid var(--green);
+      border-radius: 14px;
+      padding: 13px 22px;
+      width: calc(100% - 32px);
+      max-width: 380px;
+      box-shadow:
+        0 0 0 4px rgba(37,211,102,0.18),
+        0 8px 28px rgba(37,211,102,0.25);
+      animation: pillPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pillPulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(37,211,102,0.18), 0 8px 28px rgba(37,211,102,0.25); }
+      50%       { box-shadow: 0 0 0 8px rgba(37,211,102,0.28), 0 8px 36px rgba(37,211,102,0.4); }
+    }
+    .pill-icon {
+      width: 28px; height: 28px;
+      flex-shrink: 0;
+    }
+    .pill-icon svg {
+      width: 28px; height: 28px;
+      stroke: var(--green);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .pill-text {
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--green);
+      text-align: left;
+    }
+    .pill-text small {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* ── BROWSER VIEW ── */
     #browser-view { display: none; }
     #browser-view .headline {
       font-size: 26px;
       font-weight: 800;
-      line-height: 1.25;
       color: var(--dark);
       margin-bottom: 10px;
     }
@@ -251,23 +332,11 @@
       box-shadow: 0 6px 24px rgba(37,211,102,0.4);
       transition: transform 0.15s, box-shadow 0.15s;
     }
-    .redirect-btn:active {
-      transform: scale(0.97);
-      box-shadow: 0 2px 12px rgba(37,211,102,0.3);
-    }
     .redirect-btn svg { width: 22px; height: 22px; fill: white; }
-
-    .countdown {
-      margin-top: 20px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .countdown span { font-weight: 700; color: var(--green); }
 
     .branding {
       position: fixed;
-      bottom: 20px;
-      left: 0; right: 0;
+      bottom: 20px; left: 0; right: 0;
       text-align: center;
       font-size: 12px;
       color: #ccc;
@@ -277,33 +346,60 @@
 </head>
 <body>
 
+  <!-- ══ TOP-RIGHT ARROW (points to •••) ══ -->
+  <div class="top-arrow" id="top-arrow">
+    <!-- Tooltip label -->
+    <div class="tap-label">Appuie ici !</div>
+    <!-- Stylish curved arrow pointing up-right -->
+    <svg class="arrow-svg" viewBox="0 0 52 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Arrow shaft: curved path going upward -->
+      <path d="M38 62 C38 40, 20 35, 24 10" stroke="#25D366" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <!-- Arrowhead pointing up -->
+      <path d="M14 18 L24 8 L32 20" stroke="#25D366" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- ══ BOTTOM INDICATOR (highlight Ouvrir dans le navigateur) ══ -->
+  <div class="bottom-indicator" id="bottom-indicator">
+    <div class="down-arrow-wrap">
+      <!-- Stylish bouncing arrow pointing down -->
+      <svg class="down-arrow" viewBox="0 0 38 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 4 C19 26, 34 30, 28 44" stroke="#25D366" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path d="M18 54 L28 44 L36 54" stroke="#25D366" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="highlight-pill">
+      <div class="pill-icon">
+        <!-- Compass/external link icon -->
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/>
+        </svg>
+      </div>
+      <div class="pill-text">
+        Ouvrir dans le navigateur
+        <small>👆 Appuie ici pour rejoindre la chaîne</small>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
     <div class="wa-icon">
-      <!-- WhatsApp SVG -->
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
       </svg>
     </div>
 
-    <!-- Bouncing arrow pointing to ••• top-right -->
-    <div class="corner-arrow">
-      <div class="chev">
-        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-      </div>
-      <div class="chev2">
-        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-      </div>
-    </div>
-
-    <!-- TikTok In-App Browser: show instructions -->
+    <!-- TikTok view -->
     <div id="tiktok-view">
-      <div class="headline">Une étape rapide<br>pour me rejoindre</div>
+      <div class="headline">Une étape rapide<br>pour me rejoindre 🚀</div>
+      <div class="sub">TikTok ne peut pas ouvrir WhatsApp directement.<br>Suis ces 2 étapes simples :</div>
 
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
           <div class="step-text">
-            Appuie sur <span class="badge">••• </span> en haut à droite de l'écran
+            Appuie sur <span class="badge">• • •</span> en haut à droite de l'écran
           </div>
         </div>
         <div class="step">
@@ -313,33 +409,25 @@
           </div>
         </div>
       </div>
-
-      <div class="arrow-hint">👆 Appuie là-haut à droite</div>
     </div>
 
-    <!-- Real browser: auto-redirect -->
+    <!-- Browser view -->
     <div id="browser-view">
       <div class="headline">Redirection en cours…</div>
       <div class="sub">Tu vas être redirigé vers ma chaîne WhatsApp.</div>
-
       <a id="wa-link" href="#" class="redirect-btn">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.76-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
         </svg>
         Ouvrir ma chaîne WhatsApp
       </a>
-
-      <div class="countdown">Si ça ne s'ouvre pas, clique sur le bouton ☝️</div>
     </div>
   </div>
 
-  <div class="branding">Propulsé par Yann Pro</div>
-
   <script>
-    // ── CONFIGURE THIS ──────────────────────────────────────────────
-    // Paste your WhatsApp channel link here:
-    var WA_CHANNEL_URL = "https://whatsapp.com/channel/0029VbBRZdCEFeXt8E59503n";
-    // ────────────────────────────────────────────────────────────────
+    // ── CONFIGURE ICI ──────────────────────────────────────────────
+    var WA_CHANNEL_URL = "https://whatsapp.com/channel/VOTRE_LIEN_ICI";
+    // ──────────────────────────────────────────────────────────────
 
     function isTikTokBrowser() {
       var ua = navigator.userAgent || "";
@@ -350,11 +438,17 @@
 
     if (isTikTokBrowser()) {
       document.getElementById("tiktok-view").style.display = "block";
-    } else {
-      document.querySelector(".corner-arrow").style.display = "none";
-      document.getElementById("browser-view").style.display = "block";
 
-      // Redirect instantly
+      // Show bottom indicator after 3s (user has had time to read step 1 and tap •••)
+      setTimeout(function() {
+        document.getElementById("bottom-indicator").classList.add("visible");
+      }, 3000);
+
+    } else {
+      // Hide arrows in real browser
+      document.getElementById("top-arrow").style.display = "none";
+      document.getElementById("bottom-indicator").style.display = "none";
+      document.getElementById("browser-view").style.display = "block";
       window.location.href = WA_CHANNEL_URL;
     }
   </script>
